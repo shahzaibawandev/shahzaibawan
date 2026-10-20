@@ -240,7 +240,12 @@ export function Portfolio() {
           <a href="#about" className="hidden px-3 py-2 hover:text-primary sm:block">About</a>
           <a href="#work" className="flex items-center px-3 py-2 hover:text-primary">Work <ChevronRight className="h-4 w-4" /></a>
           <a href="#reviews" className="hidden px-3 py-2 hover:text-primary sm:block">Reviews</a>
-          <a href="#contact" className="ml-2 rounded-full bg-primary px-4 py-2 font-medium text-primary-foreground transition-transform hover:scale-105">Contact me</a>
+<a
+  href="#contact"
+  className="ml-2 inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-105"
+>
+  Contact me
+</a>
         </div>
       </nav>
       <a href="#top" aria-label="Back to top" className="fixed bottom-0 right-[5%] z-40 rounded-t-lg bg-ink px-4 py-2 text-ink-foreground">
@@ -259,7 +264,7 @@ export function Portfolio() {
           </div>
           <div className="hero-right order-3 text-center md:text-right">
             <p className="hero-sub mb-4 text-muted-foreground">AI Automation & Agents</p>
-            <h1 className="mask-line"><span className="hero-name font-wide block text-6xl lg:text-7xl">AWAN</span></h1>
+            <h1 className="mask-line"><span className="hero-name text-primary font-wide block text-6xl lg:text-7xl">AWAN</span></h1>
             <p className="hero-sub mt-8 text-muted-foreground">Pakistan - {clock} GMT+5</p>
           </div>
         </div>
