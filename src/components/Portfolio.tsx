@@ -5,7 +5,10 @@ import { useGSAP } from "@gsap/react";
 import { Home, ChevronRight, ArrowUp, Star, ArrowUpRight, Copy, Check, Moon, Sun } from "lucide-react";
 import heroImg from "@/assets/pic.png";
 import { Button } from "@/components/ui/button";
-import { link } from "fs";
+import Chatbot from "@/components/Chatbot";
+
+
+
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger, useGSAP);
  
@@ -214,10 +217,12 @@ export function Portfolio() {
     },
     { scope: root, dependencies: [loaded] },
   );
+  
 
   return (
     <div ref={root} className="relative">
       {!loaded && <Preloader onDone={() => setLoaded(true)} />}
+        
 
       <Button
         type="button"
@@ -239,13 +244,14 @@ export function Portfolio() {
           <a href="#skills" className="hidden px-3 py-2 hover:text-primary sm:block">Skills</a>
           <a href="#about" className="hidden px-3 py-2 hover:text-primary sm:block">About</a>
           <a href="#work" className="flex items-center px-3 py-2 hover:text-primary">Work <ChevronRight className="h-4 w-4" /></a>
+      
           <a href="#reviews" className="hidden px-3 py-2 hover:text-primary sm:block">Reviews</a>
-<a
+   <a
   href="#contact"
   className="ml-2 inline-flex shrink-0 items-center justify-center whitespace-nowrap rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-transform hover:scale-105"
->
+  >
   Contact me
-</a>
+  </a>
         </div>
       </nav>
       <a href="#top" aria-label="Back to top" className="fixed bottom-0 right-[5%] z-40 rounded-t-lg bg-ink px-4 py-2 text-ink-foreground">
@@ -268,6 +274,7 @@ export function Portfolio() {
             <p className="hero-sub mt-8 text-muted-foreground">Pakistan - {clock} GMT+5</p>
           </div>
         </div>
+      
       </section>
 
       {/* Services */}
@@ -455,6 +462,10 @@ export function Portfolio() {
           </div>
         </div>
       </section>
+  <Chatbot />
+      
+        
     </div>
+    
   );
 }
