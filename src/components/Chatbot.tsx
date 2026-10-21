@@ -46,11 +46,14 @@ const useIsMobile = () => {
   return mobile;
 };
 
+const CLOSE_MS = 240; // band hone ki animation ka time (milliseconds)
+
 const Chatbot = () => {
   const dark = useIsDark();
   const mobile = useIsMobile();
   const [visible, setVisible] = useState(false);
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false); // window DOM mein hai ya nahi (close animation ke liye)
   const [messages, setMessages] = useState<Message[]>([
     { sender: "bot", text: "Hi! 👋 I'm Shahzaib's AI assistant. Ask me anything!" },
   ]);
@@ -132,6 +135,16 @@ const Chatbot = () => {
     return () => clearTimeout(timer);
   }, []);
 
+  // Open/close: kholte waqt foran mount, band karte waqt animation ke baad unmount
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      return;
+    }
+    const timer = setTimeout(() => setMounted(false), CLOSE_MS);
+    return () => clearTimeout(timer);
+  }, [open]);
+
   // Teaser loop: typing dots -> message -> typing dots -> next message
   useEffect(() => {
     if (open || !visible) return;
@@ -208,16 +221,24 @@ const Chatbot = () => {
   return (
     <>
       <style>{`
-        @keyframes cb-pop { from { opacity:0; transform: translateY(16px) scale(.94);} to { opacity:1; transform: translateY(0) scale(1);} }
+        @keyframes cb-in {
+          from { opacity: 0; transform: translateY(24px) scale(.85); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes cb-out {
+          from { opacity: 1; transform: translateY(0) scale(1); }
+          to   { opacity: 0; transform: translateY(24px) scale(.85); }
+        }
         @keyframes cb-fab { from { opacity:0; transform: scale(.4);} to { opacity:1; transform: scale(1);} }
+        @keyframes cb-icon { from { opacity:0; transform: rotate(-90deg) scale(.5);} to { opacity:1; transform: rotate(0) scale(1);} }
         @keyframes cb-dot { 0%,60%,100% { transform: translateY(0); opacity:.5;} 30% { transform: translateY(-5px); opacity:1;} }
         @keyframes cb-fade { from { opacity:0; transform: translateY(6px);} to { opacity:1; transform: translateY(0);} }
         .cb-scroll::-webkit-scrollbar { width: 6px; }
         .cb-scroll::-webkit-scrollbar-thumb { background: ${dark ? "#3f3f46" : "#cbd5e1"}; border-radius: 6px; }
       `}</style>
 
-      {/* Teaser bubble (sirf jab chat band ho) */}
-      {!open && (
+      {/* Teaser bubble (sirf jab chat poori tarah band ho) */}
+      {!open && !mounted && (
         <div
           key={phase + teaserIdx}
           style={{
@@ -243,7 +264,7 @@ const Chatbot = () => {
       )}
 
       {/* Chat window */}
-      {open && (
+      {mounted && (
         <div
           style={{
             position: "fixed",
@@ -256,7 +277,11 @@ const Chatbot = () => {
             borderRadius: 20,
             overflow: "hidden",
             boxShadow: t.shadow,
-            animation: "cb-pop .25s ease-out",
+            transformOrigin: "bottom right",
+            animation: open
+              ? "cb-in .35s cubic-bezier(.16,1,.3,1) forwards"
+              : `cb-out ${CLOSE_MS}ms cubic-bezier(.4,0,1,1) forwards`,
+            pointerEvents: open ? "auto" : "none",
             fontFamily: "inherit",
           }}
         >
@@ -455,7 +480,12 @@ const Chatbot = () => {
           animation: "cb-fab .35s ease-out",
         }}
       >
-        {open ? <X size={26} /> : <MessageCircle size={26} />}
+        <span
+          key={open ? "x" : "chat"}
+          style={{ display: "grid", placeItems: "center", animation: "cb-icon .3s ease-out" }}
+        >
+          {open ? <X size={26} /> : <MessageCircle size={26} />}
+        </span>
       </button>
     </>
   );
